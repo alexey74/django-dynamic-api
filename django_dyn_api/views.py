@@ -47,7 +47,7 @@ class DynamicAPI(APIView):
                         'success': False
                     }, status=400)
 
-                thing = get_object_or_404(Utils.get_manager(DYNAMIC_API, kwargs.get('model_name')), id=model_id)
+                thing = get_object_or_404(Utils.get_manager(DYNAMIC_API, kwargs.get('model_name')), pk=model_id)
                 model_serializer = Utils.get_serializer(DYNAMIC_API, kwargs.get('model_name'))(instance=thing)
                 output = model_serializer.data
             else:
@@ -97,7 +97,7 @@ class DynamicAPI(APIView):
     #@check_permission
     def put(self, request, **kwargs):
         try:
-            thing = get_object_or_404(Utils.get_manager(DYNAMIC_API, kwargs.get('model_name')), id=kwargs.get('id'))
+            thing = get_object_or_404(Utils.get_manager(DYNAMIC_API, kwargs.get('model_name')), pk=kwargs.get('id'))
             model_serializer = Utils.get_serializer(DYNAMIC_API, kwargs.get('model_name'))(instance=thing,
                                                                                            data=request.data,
                                                                                            partial=True)
@@ -129,7 +129,7 @@ class DynamicAPI(APIView):
         try:
             model_manager = Utils.get_manager(DYNAMIC_API, kwargs.get('model_name'))
             to_delete_id = kwargs.get('id')
-            model_manager.get(id=to_delete_id).delete()
+            model_manager.get(pk=to_delete_id).delete()
         except KeyError:
             return Response(data={
                 'message': 'this model is not activated or not exist.',
